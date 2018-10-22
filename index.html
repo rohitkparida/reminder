@@ -9,20 +9,34 @@
 </head>
 
 <body>
-    <input id="primary">
-    <p>Current permission status is <b id="status">...</b>.</p>
-    <p><button class="btn btn-default" onclick="display()">Show Notification</button></p>
+    <p id="title">Reminder Notifications</p>
+    <textarea id="primary" placeholder='Title'></textarea>
+    <textarea id="secondary" placeholder='Description'></textarea>
+    <select id="icons" onchange="icon()">>
+        <option value="https://web-push-book.gauntface.com/images/demos/icon-512x512.png">Reminder</option>
+        <option value="https://web-push-book.gauntface.com/images/demos/icon-512x512.png">Event</option>
+        <option value="https://web-push-book.gauntface.com/images/demos/icon-512x512.png">Call</option>
+    </select>
+    <button class="btn" onclick="display()">Show Notification</button>
+    <p>Current permission status is: <b id="status">...</b></p>
     <script>
+        function icon() {
+            var e = document.getElementById("icons");
+            var strUser = e.options[e.selectedIndex].value;
+            return strUser;
+        };
+
+        function titleTxt() {
+            var newTitle = document.getElementById("primary").value;
+            return newTitle;
+        };
+
+        function bodyTxt() {
+            var bodyTxt = document.getElementById("secondary").value;
+            return bodyTxt;
+        };
+
         var $status = document.getElementById('status');
-
-        function myFunction() {
-            msg = document.getElementById("primary").value;
-            console.log(msg);
-        };
-
-        document.getElementById("primary").onkeyup = function() {
-            myFunction()
-        };
 
         if ('Notification' in window) {
             $status.innerText = Notification.permission;
@@ -39,19 +53,6 @@
             });
         }
 
-        function nonPersistentNotification() {
-            if (!('Notification' in window)) {
-                alert('Notification API not supported!');
-                return;
-            }
-
-            try {
-                var notification = new Notification(msg, hello);
-            } catch (err) {
-                alert('Notification API error: ' + err);
-            }
-        }
-
         function persistentNotification() {
             if (!('Notification' in window) || !('ServiceWorkerRegistration' in window)) {
                 alert('Persistent Notification API not supported!');
@@ -59,13 +60,31 @@
             }
 
             try {
+                var title = titleTxt();
+                var options = {
+                    icon: icon(),
+                    body: bodyTxt()
+                };
                 navigator.serviceWorker.getRegistration()
-                    .then(reg => reg.showNotification(msg))
-                // .catch(err => alert('Service Worker registration error: ' + err));
+                    .then(reg => reg.showNotification(title + ' persistent', options))
             } catch (err) {
                 alert('Notification API error: ' + err);
             }
         }
+
+        function nonPersistentNotification() {
+            try {
+                var title = titleTxt();
+                var options = {
+                    icon: icon(),
+                    body: bodyTxt()
+                };
+                var notification = new Notification(title, options);
+            } catch (err) {
+                alert('Notification API error: ' + err);
+            }
+        }
+
         // Registering ServiceWorker
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js').then(function(registration) {
@@ -81,7 +100,7 @@
             requestPermission();
             try {
                 persistentNotification();
-                console.log(msg);
+                console.log(title);
             } catch (err) {
                 nonPersistentNotification();
             }
