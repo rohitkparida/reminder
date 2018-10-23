@@ -75,7 +75,9 @@
                 var title = titleTxt();
                 var options = {
                     icon: icon(),
-                    body: bodyTxt()
+                    body: bodyTxt(),
+                    badge: badge(),
+                    image: icon()
                 };
                 navigator.serviceWorker.getRegistration()
                     .then(reg => reg.showNotification(title, options))
