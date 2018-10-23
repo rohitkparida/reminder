@@ -13,10 +13,10 @@
     <textarea id="primary" placeholder='Title'></textarea>
     <textarea id="secondary" placeholder='Description'></textarea>
     <select id="icons" onchange="getAsset()">
-        <option value="icons/work.png">Work</option>
-        <option value="badge/work.png" hidden>Work</option>
-        <option value="icons/imp.png">Important</option>
-        <option value="badge/imp.png" hidden>Important</option>
+        <option value="https://rohitkparida.github.io/reminder/icons/work.png">Work</option>
+        <option value="https://rohitkparida.github.io/reminder/badge/work.png" hidden>Work</option>
+        <option value="https://rohitkparida.github.io/reminder/icons/imp.png">Important</option>
+        <option value="https://rohitkparida.github.io/reminder/badge/imp.png" hidden>Important</option>
     </select>
     <button class="btn" onclick="display()">Show Notification</button>
     <p>Current permission status is: <b id="status">...</b></p>
@@ -77,7 +77,7 @@
                     icon: icon(),
                     body: bodyTxt(),
                     badge: badge(),
-                    image: icon()
+                    // image: icon()
                 };
                 navigator.serviceWorker.getRegistration()
                     .then(reg => reg.showNotification(title, options))
