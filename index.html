@@ -12,18 +12,30 @@
     <p id="title">Reminder Notifications</p>
     <textarea id="primary" placeholder='Title'></textarea>
     <textarea id="secondary" placeholder='Description'></textarea>
-    <select id="icons" onchange="icon()">>
-        <option value="https://web-push-book.gauntface.com/images/demos/icon-512x512.png">Reminder</option>
-        <option value="https://web-push-book.gauntface.com/images/demos/icon-512x512.png">Event</option>
-        <option value="https://web-push-book.gauntface.com/images/demos/icon-512x512.png">Call</option>
+    <select id="icons" onchange="getAsset()">
+        <option value="icons/work.png">Work</option>
+        <option value="badge/work.png" hidden>Work</option>
+        <option value="icons/imp.png">Important</option>
+        <option value="badge/imp.png" hidden>Important</option>
     </select>
     <button class="btn" onclick="display()">Show Notification</button>
     <p>Current permission status is: <b id="status">...</b></p>
     <script>
+        function getAsset() {
+            icon();
+            badge();
+        }
+
         function icon() {
             var e = document.getElementById("icons");
-            var strUser = e.options[e.selectedIndex].value;
-            return strUser;
+            var ic = e.options[e.selectedIndex].value;
+            return ic;
+        };
+
+        function badge() {
+            var d = document.getElementById("icons");
+            var bg = d.options[d.selectedIndex + 1].value;
+            return bg;
         };
 
         function titleTxt() {
@@ -66,7 +78,7 @@
                     body: bodyTxt()
                 };
                 navigator.serviceWorker.getRegistration()
-                    .then(reg => reg.showNotification(title + ' persistent', options))
+                    .then(reg => reg.showNotification(title, options))
             } catch (err) {
                 alert('Notification API error: ' + err);
             }
@@ -100,7 +112,6 @@
             requestPermission();
             try {
                 persistentNotification();
-                console.log(title);
             } catch (err) {
                 nonPersistentNotification();
             }
