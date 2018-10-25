@@ -13,6 +13,8 @@
     <textarea id="primary" placeholder='Title'></textarea>
     <textarea id="secondary" placeholder='Description'></textarea>
     <select id="icons" onchange="getAsset()">
+        <option value="https://rohitkparida.github.io/reminder/icons/home.png">Home</option>
+        <option value="https://rohitkparida.github.io/reminder/badge/home.png" hidden>Home</option>
         <option value="https://rohitkparida.github.io/reminder/icons/work.png">Work</option>
         <option value="https://rohitkparida.github.io/reminder/badge/work.png" hidden>Work</option>
         <option value="https://rohitkparida.github.io/reminder/icons/imp.png">Important</option>
@@ -27,14 +29,14 @@
         }
 
         function icon() {
-            var e = document.getElementById("icons");
-            var ic = e.options[e.selectedIndex].value;
+            var e = document.getElementById("icons"),
+                ic = e.options[e.selectedIndex].value;
             return ic;
         };
 
         function badge() {
-            var d = document.getElementById("icons");
-            var bg = d.options[d.selectedIndex + 1].value;
+            var d = document.getElementById("icons"),
+                bg = d.options[d.selectedIndex + 1].value;
             return bg;
         };
 
@@ -72,13 +74,12 @@
             }
 
             try {
-                var title = titleTxt();
-                var options = {
-                    icon: icon(),
-                    body: bodyTxt(),
-                    badge: badge(),
-                    // image: icon()
-                };
+                var title = titleTxt(),
+                    options = {
+                        icon: icon(),
+                        body: bodyTxt(),
+                        badge: badge(),
+                    };
                 navigator.serviceWorker.getRegistration()
                     .then(reg => reg.showNotification(title, options))
             } catch (err) {
@@ -88,11 +89,12 @@
 
         function nonPersistentNotification() {
             try {
-                var title = titleTxt();
-                var options = {
-                    icon: icon(),
-                    body: bodyTxt()
-                };
+                var title = titleTxt(),
+                    options = {
+                        icon: icon(),
+                        body: bodyTxt(),
+                        badge: badge(),
+                    };
                 var notification = new Notification(title, options);
             } catch (err) {
                 alert('Notification API error: ' + err);
